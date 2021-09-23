@@ -1,7 +1,7 @@
 dependencies：
   - python=3
   - pip:
-   - spacy
-   - numpy
-   - pandas
-   - os
+    - spacy
+    - numpy
+    - pandas
+    - os
