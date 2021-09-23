@@ -1,6 +1,6 @@
 dependencies：
   - python=3
-  - pip
+  - pip:
    - spacy
    - numpy
    - pandas
