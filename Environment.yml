@@ -1,0 +1,7 @@
+dependencies：
+  - python=3
+  - pip
+   - spacy
+   - numpy
+   - pandas
+   - os
