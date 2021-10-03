@@ -1,0 +1,284 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Assignment 2: Maximum Likelihood [ __ / 70 marks]\n",
+    "\n",
+    "\n",
+    "<img src=\"https://www.statisticshowto.com/wp-content/uploads/2015/09/Laplace-distribution.png\" height=200 width=450>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The Laplace distribution is a continuous probability distribution defined as the following:\n",
+    "\n",
+    "$$ f(y; \\mu, \\lambda) = \\frac{1}{2\\lambda}\\exp\\Bigg(-\\frac{\\lvert y-\\mu \\rvert}{\\lambda}\\Bigg)$$\n",
+    "\n",
+    "In this assignment we will use Maximum Likelihood Estimation to fit a Laplace distribution to a dataset, assuming an exponential model ($\\hat{y}=\\exp(\\mathbf{Xb}$)) rather than our previous linear model ($\\hat{y}=\\mathbf{Xb}$). Here again we will find optimal values for $\\mathbf{b}$. However, unlike our previous work, instead of finding a parameter $\\mathbf{b}$ which minimizes a loss function, we will find a $\\mathbf{b}$ *which maximizes the Laplace Log Likelihood*. Feel free to refer to `L2_codeF2.ipynb`.\n",
+    "\n",
+    "### Before you submit...\n",
+    "* For good measure, restart your kernel by clicking 'Kernel' > 'Restart & Run All'."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import pandas as pd\n",
+    "import scipy.optimize as so\n",
+    "from sklearn import linear_model\n",
+    "from IPython.display import display"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 1 [ _ / 7 Marks]\n",
+    "For a Laplace distribution we can write the negative log likelihood as the following:\n",
+    "\n",
+    "$$\\ell(y_1,y_2,...,y_n; \\mu, \\lambda)=-\\sum_{i=1}^{n}-\\log(2\\lambda)-\\frac{\\lvert y_i-\\mu \\rvert}{\\lambda}$$\n",
+    "\n",
+    "Write a function called `laplaceNegLogLikelihood` which takes a vector $\\mathbf{y}$ and parameters $\\mu$ and $\\lambda$ and returns the negative log likelihood. Test your function by calling it with `mu = 0`, `lam = 1` and `y=np.array([2,1,0,0])`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def laplaceNegLogLikelihood(mu,lam,y):\n",
+    "    # Compute and return nll (negative log likelihood) [ /5 marks]\n",
+    "    nll = # ****** your code here ******\n",
+    "    return nll\n",
+    "\n",
+    "#Test your function with these values [ /2 marks]\n",
+    "mu=0\n",
+    "lam=1\n",
+    "y=np.array([2,1,0,0])\n",
+    "\n",
+    "# ****** your code here ******"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 2 [ _ / 6 Marks]\n",
+    "\n",
+    "Write a function called `laplaceRegNegLogLikelihood` that takes as arguments a vector $\\mathbf{y}$, a matrix $\\mathbf{X}$ of features, and a vector $\\mathbf{b}$ of parameters. The function should return the negative log likelihood, assuming that each element of  $\\mathbf{y}$ is independent and identically distributed (i.e. Coming from a Laplace distribution) with parameter $\\mu = \\exp(\\mathbf{X}\\mathbf{b})$. In your return statement, let `lam=1`. Test your function by calling it with `b=np.array([1,2])`, `X=np.array([[1,1,1],[0,2,1]]).T`, `y=np.array([0,2,10])`\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def laplaceRegNegLogLikelihood(b, X, y):\n",
+    "    # Compute mu [ /2 marks]\n",
+    "    mu = # ****** your code here ******\n",
+    "    # Compute negative log likelihood (let lam = 1) [ /2 marks]\n",
+    "    nll = # ****** your code here ******\n",
+    "    return nll\n",
+    "\n",
+    "#Test your function with these values [ /2 marks]\n",
+    "b=np.array([1,2])\n",
+    "X=np.array([[1,1,1],[0,2,1]]).T\n",
+    "y=np.array([0,2,10])\n",
+    "\n",
+    "# ****** your code here ******"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 3 [ _ / 4 Marks]\n",
+    "\n",
+    "Write a function called `modelPredict` which accepts as its first argument $\\mathbf{b}$ (exponential model parameters) and a matrix $\\mathbf{X}$ (for the exponential model, a column of ones and column of $x_i$ inputs).  The function should return predictions of the form $\\widehat{\\mathbf{y}} = \\exp(\\mathbf{X}\\mathbf{b})$. Test your function by calling it with `b=np.array([1,2])`, `X=np.array([[1,1,1],[0,2,1]]).T`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def modelPredict(b,X):\n",
+    "    #Compute yhat [ /2 marks]\n",
+    "    yhat = # ****** your code here ******\n",
+    "    return yhat\n",
+    "\n",
+    "#Test your function with these values [ /2 marks]\n",
+    "b=np.array([1,2])\n",
+    "X=np.array([[1,1,1],[0,2,1]]).T\n",
+    "\n",
+    "# ****** your code here ******"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 4 [ _ / 6 Marks]\n",
+    "\n",
+    "Write a function called `modelFit` which accepts matrix $\\mathbf{X}$ and outcomes vector $\\mathbf{y}$ as arguments. The function should return a prediction for $\\mathbf{b}$ which maximizes the Laplace Log Likelihood. Test your function with `X=np.array([[1,1,1],[0,2,1]]).T`, `y=np.array([0,2,10])`. Which values do you get for $\\mathbf{b}$? Print these values."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def modelFit(X,y):\n",
+    "    b_init = np.zeros(X.shape[1])\n",
+    "    # Start from b_init. Use so.minimize to get a prediction for b which maximizes Laplace Log Likelihood [ /4 marks]  \n",
+    "    RES = # ****** your code here ******\n",
+    "    return # ****** your code here ******\n",
+    "\n",
+    "#Test your function with these values [ /2 marks]\n",
+    "X = np.array([[1,1,1],[0,2,1]]).T\n",
+    "y = np.array([0,2,10])\n",
+    "\n",
+    "# ****** your code here ******"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 5 [ _ / 6 Marks]\n",
+    "\n",
+    "Load in the data from `A2.csv`. This is a toy dataset which is meant to illustrate geyser eruption times vs. waiting times (until a particular eruption event). \"x\" in this dataset is $\\frac{1}{\\text{eruption length}}$ ($\\text{minutes}^{-1}$) for a particular eruption. \"y\" in this dataset describes the waiting time until said eruption (minutes). Plot a scatterplot of the data. Include axis labels. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Load in the data [ /2 marks]\n",
+    "df = # ****** your code here ******\n",
+    "\n",
+    "# Plot a scatterplot with labels [ /4 marks]\n",
+    "# ****** your code here ******\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 6 [ _ / 19 Marks]\n",
+    "\n",
+    "Fit a Laplace regression to this data using the functions you wrote above. To recap: here you will find parameters $\\mathbf{b}$ (from $\\mu = \\exp(\\mathbf{Xb}))$ which maximize the Laplace Log Likelihood for our A2 data. Plot the model predictions (`y_pred`) over a set of new x-values $x_{new} \\in [0,6]$ (you can use np.linspace for this) in addition to a scatterplot of the data (i.e. plot points + fit).  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#First, construct the matrix X (with a column of ones and a column of x values) [ /4 marks]\n",
+    "x = # ****** your code here ******\n",
+    "X = # ****** your code here ******\n",
+    "\n",
+    "#Next, find b by calling modelFit. modelFit should optimize the laplaceRegressionNegLogLikelihood [ /4 marks]\n",
+    "y = # ****** your code here ******\n",
+    "b = # ****** your code here ******\n",
+    "\n",
+    "# For our prediction we need to create new x data (use linspace) and put it in matrix X [ /4 marks]\n",
+    "x_new = # ****** your code here ******\n",
+    "X_new = # ****** your code here ******\n",
+    "\n",
+    "# Use modelPredict to get y_pred [ /2 marks]\n",
+    "y_pred = # ****** your code here ******\n",
+    "\n",
+    "#Plot the data points and predictions on the same plot; color the predictions red [ /5 marks] \n",
+    "# ****** your code here ******\n",
+    "\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Question 7 [ _ / 22 marks] \n",
+    "\n",
+    "Finally, apply linear regression (L2, also called \"OLS\") to the data, obtain parameter estimates and plot the predictions over the same range as in Question 6 (i.e. $x \\in [0,6]$). Do you see a problem with the linear regression? Explain why this might be a problem in a sentence or two."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#First, construct the matrix X (with a column of ones and a column of x values) [ /4 marks]\n",
+    "x = # ****** your code here ****** \n",
+    "X = # ****** your code here ******\n",
+    "\n",
+    "# Get y values, then use sklearn's linear_model.LinearRegression().fit() to create an L2 fit (using X and y) [ /4 marks]\n",
+    "y = # ****** your code here ******\n",
+    "L2_fit = # ****** your code here ******\n",
+    "\n",
+    "# For our prediction we need to create new x data (use linspace) and put this in matrix X_new [ /4 marks]\n",
+    "x_new = # ****** your code here ******\n",
+    "X_new = # ****** your code here ******\n",
+    "\n",
+    "# Use sklearn's \"predict\" method to get your prediction, given an input matrix X_new y_pred_L2 [ /2 marks]\n",
+    "y_pred_L2 = # ****** your code here ******\n",
+    "\n",
+    "# Plot the data and linear regression on the same figure. Label axes [ /5 marks]\n",
+    "# ****** your code here ******\n",
+    "\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Why is it a problem? [_ /3 marks]"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
